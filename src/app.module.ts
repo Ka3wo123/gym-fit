@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { GymUsersModule } from './gym-users/gym-user.module';
+import { AuthModule } from './auth/auth.module';
 
 
 const options: TypeOrmModuleOptions = {
@@ -18,8 +19,8 @@ const options: TypeOrmModuleOptions = {
 
 
 @Module({
-  imports: [TypeOrmModule.forRoot(options), GymUsersModule],
+  imports: [TypeOrmModule.forRoot(options), GymUsersModule, AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

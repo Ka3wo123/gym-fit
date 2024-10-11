@@ -17,19 +17,7 @@ export class GymUserService {
         return this._gymUserRepo.findOneBy({ email });
     }
 
-    public createNewUser(gymUser: GymUserDto) {
-        const { name, surname, email, password, age } = gymUser;
-        const userToSave = new GymUser();
-        userToSave.name = name;
-        userToSave.surname = surname;
-        userToSave.email = email;
-        userToSave.password = password;
-        userToSave.age = age;
-
-        this._gymUserRepo.create(userToSave);
-
-        return from(this._gymUserRepo.save(userToSave));
-    }
+   
 
     
 }

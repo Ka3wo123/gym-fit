@@ -15,6 +15,8 @@ export class GymUser {
     password: string;
     @Column({ nullable: true })
     age?: number;
+    @Column({nullable: true})
+    refreshToken: string
 
 
 }
