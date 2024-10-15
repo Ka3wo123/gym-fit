@@ -1,11 +1,11 @@
-<div style="display: flex; justify-content: space-around; align-items: center;">
-  <a href="https://mariadb.org/" target="_blank" align='left'>
+<div align='center'">
+  <a href="https://mariadb.org/" target="_blank">
     <img src="https://mariadb.com/wp-content/uploads/2019/11/mariadb-logo-vert_blue-transparent.png" width="120" alt="MariaDB Logo" />
   </a>
-  <a href="http://nestjs.com/" target="_blank" align='center'>
+  <a href="http://nestjs.com/" target="_blank">
     <img src="https://nestjs.com/img/logo-small.svg" width="120" alt="NestJS Logo" />
   </a>
-  <a href="https://angular.io/" target="_blank" align='right'>
+  <a href="https://angular.io/" target="_blank">
     <img src="https://angular.io/assets/images/logos/angular/angular.svg" width="120" alt="Angular Logo" />
   </a>
 </div>
