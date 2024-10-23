@@ -1,0 +1,47 @@
+<div class="registration-container">
+  <mat-card>
+    <h1>Register</h1>
+    <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required>
+        <mat-error *ngIf="registrationForm.get('name')?.invalid">Name is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Surname</mat-label>
+        <input matInput formControlName="surname" required>
+        <mat-error *ngIf="registrationForm.get('surname')?.invalid">Surname is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" required>
+        <mat-error *ngIf="registrationForm.get('email')?.hasError('email')">Invalid email</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Workout Type</mat-label>
+        <mat-select formControlName="workoutType">
+          <mat-option>None</mat-option>
+          <mat-option *ngFor="let type of workoutTypes" [value]="type">{{ type }}</mat-option>
+        </mat-select>        
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Age</mat-label>
+        <input matInput formControlName="age" type="number">
+        <mat-error *ngIf="registrationForm.get('age')?.hasError('min')">Age must be at least 18.</mat-error>
+        <mat-error *ngIf="registrationForm.get('age')?.hasError('max')">Age cannot exceed 100.</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" required>
+        <mat-error *ngIf="registrationForm.get('password')?.invalid">Password is required</mat-error>
+      </mat-form-field>
+      <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Register</button>
+    </form>
+  </mat-card>
+</div>
