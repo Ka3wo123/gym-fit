@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
-import { JwtModule } from '@nestjs/jwt';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GymUser } from 'src/entities/gym-user.entity';
 import { PassportModule } from '@nestjs/passport';
@@ -22,13 +22,23 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           expiresIn: '1d'
         }
       }),
-      inject: [ConfigService]
+      inject: [
+        ConfigService
+      ]
     }),
     PassportModule.register({
       defaultStrategy: 'jwt'
     })
   ],
-  providers: [AuthService, UniqueEmailValidator],
-  controllers: [AuthController]
+  providers: [
+    AuthService,
+    UniqueEmailValidator
+  ],
+  controllers: [
+    AuthController
+  ],
+  exports: [
+    AuthService
+  ]
 })
 export class AuthModule { }

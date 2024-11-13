@@ -2,7 +2,9 @@ import { Body, Controller, HttpCode, HttpStatus, Post, ValidationPipe } from '@n
 import { AuthService } from './auth.service';
 import { RegisterGymUserDto } from 'src/dtos/register-gym-user.dto';
 import { AuthGymUserDto } from 'src/dtos/auth-gym-user.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
     constructor(private readonly _authService: AuthService) { }

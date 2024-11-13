@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from, map } from 'rxjs';
+import { from } from 'rxjs';
 import { AuthGymUserDto } from 'src/dtos/auth-gym-user.dto';
 import { RegisterGymUserDto } from 'src/dtos/register-gym-user.dto';
 import { GymUser } from 'src/entities/gym-user.entity';
@@ -9,6 +9,8 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
+import { Role } from 'src/types/roles.enum';
+import { GymUserDto } from 'src/dtos/gym-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +33,11 @@ export class AuthService {
 
 
         if (isPasswordMatch) {
-            const jwtToken = await this._jwt.signAsync({ email });
+            const jwtToken = await this._jwt.signAsync({
+                email,
+                role: user.role
+            });
+            
             const refreshToken = uuid();
 
             user.refreshToken = refreshToken;
@@ -43,8 +49,8 @@ export class AuthService {
 
     }
 
-    public async createNewUser(gymUser: RegisterGymUserDto) {
-        const { name, surname, email, password, age } = gymUser;
+    public async createNewUser(gymUser: RegisterGymUserDto): Promise<GymUserDto> {
+        const { name, surname, email, password, age, workoutType, role } = gymUser;
         const userToSave = new RegisterGymUserDto();
         const hashedPassword = await bcrypt.hash(password, 12);
 
@@ -53,10 +59,12 @@ export class AuthService {
         userToSave.email = email;
         userToSave.password = hashedPassword;
         userToSave.age = age;
+        userToSave.workoutType = workoutType;
+        userToSave.role = role || Role.USER;
 
         this._gymUserRepo.create(userToSave);
 
-        return from(this._gymUserRepo.save(userToSave));
+        return this._gymUserRepo.save(userToSave);
     }
 
     public validateToken(token: string) {

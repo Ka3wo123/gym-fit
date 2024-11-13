@@ -1,5 +1,6 @@
 import { IsNotEmpty, Matches, MinLength, Validate } from "class-validator";
 import { UniqueEmailValidator } from "src/custom-validators/email-unique.validator";
+import { Role } from "src/types/roles.enum";
 import { WorkoutType } from "src/types/workout-type.enum";
 
 export class RegisterGymUserDto {
@@ -19,5 +20,6 @@ export class RegisterGymUserDto {
     @IsNotEmpty()
     password: string;
     workoutType: WorkoutType;
+    role: Role;
     age?: number;
 }

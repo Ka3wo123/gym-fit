@@ -1,1 +1,13 @@
-/* You can add global styles to this file, and also import other style files */
+body {
+    background: linear-gradient(to right, #130e3f, #5b4b5e);
+}
+
+.toast-success {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+.toast-error {
+    background-color: #f44336;
+    color: #fff;
+}

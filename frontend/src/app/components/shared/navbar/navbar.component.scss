@@ -1,0 +1,39 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #d400ff;
+    transition: 0.3s;
+}
+
+.navbar {
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(255, 255, 255, 0.2);
+    padding: 10px 20px;
+    background-color: #000000;
+}
+
+@media (max-width: 600px) {
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav a {
+        margin: 5px 0;
+    }
+}

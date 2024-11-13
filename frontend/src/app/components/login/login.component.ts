@@ -8,6 +8,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { GymUserService } from '../../../services/GymUserService';
 import GymUserAuth from '../../../types/GymUserAuth';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -21,38 +23,42 @@ import GymUserAuth from '../../../types/GymUserAuth';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-      ],
-  
+    ToastrModule
+  ]
 })
 export class LoginComponent {
   loginForm: FormGroup;
   userToAuth: GymUserAuth | null = null;
 
-  constructor(private fb: FormBuilder,
-    private readonly _userService: GymUserService
+  constructor(
+    private readonly _fb: FormBuilder,
+    private readonly _userService: GymUserService,
+    private readonly _toastr: ToastrService,
+    private readonly _router: Router
+
   ) {
-    this.loginForm = this.fb.group({
+    this.loginForm = this._fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
   }
 
   onSubmit() {
-    if (this.loginForm.valid) {
-      this.userToAuth = this.loginForm.value as GymUserAuth;
-      console.log('User to save:', this.userToAuth);
-      this._userService.authenticateUser(this.userToAuth).subscribe({
-        next: (response) => {
-          localStorage.setItem("accessToken", response.token);
-          localStorage.setItem("refreshToken", response.refreshToken);
-        },
-        error: (error) => {
-          console.error('Registration failed:', error);
+    this.userToAuth = this.loginForm.value as GymUserAuth;
+    this._userService.authenticateUser(this.userToAuth).subscribe({
+      next: (response) => {
+        localStorage.setItem("accessToken", response.token);
+        localStorage.setItem("refreshToken", response.refreshToken);
+        this._toastr.success(`Successfully logged in`);
+        this._router.navigate(['/'])
+      },
+      error: (error) => {
+        console.log(error)
+        if (error.error.statusCode === 401) {
+          this._toastr.error(error.error.message);
         }
-      });
-    } else {
-      console.log("Form isn't valid");
-      console.log(this.loginForm.errors);
-    }
+      }
+    });
+
   }
 }

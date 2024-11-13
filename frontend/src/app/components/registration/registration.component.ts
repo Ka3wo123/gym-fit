@@ -10,6 +10,8 @@ import { WorkoutType } from '../../../types/WorkoutType';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { GymUserService } from '../../../services/GymUserService';
 import GymUserRegistration from '../../../types/GymUserRegistration';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-registration',
@@ -24,7 +26,8 @@ import GymUserRegistration from '../../../types/GymUserRegistration';
     MatCardModule,
     MatButtonModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    ToastrModule
   ]
 })
 export class RegistrationComponent {
@@ -32,34 +35,38 @@ export class RegistrationComponent {
   workoutTypes: WorkoutType[] = Object.values(WorkoutType);
   userToSave: GymUserRegistration | null = null
 
-  constructor(private readonly _fb: FormBuilder,
-    private readonly _userService: GymUserService
+  constructor(
+    private readonly _fb: FormBuilder,
+    private readonly _userService: GymUserService,
+    private readonly _toastr: ToastrService
+
   ) {
     this.registrationForm = this._fb.group({
       name: ['', Validators.required],
       surname: ['', Validators.required],
       workoutType: [''],
-      age: ['', [Validators.min(18), Validators.max(100)]],
+      age: [null, [Validators.min(18), Validators.max(100)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
   }
 
   onSubmit() {
-    if (this.registrationForm.valid) {
-      this.userToSave = this.registrationForm.value as GymUserRegistration;
-      console.log('User to save:', this.userToSave);
-      this._userService.createUser(this.userToSave).subscribe({
-        next: () => {
-          console.log('User registration successful');          
-        },
-        error: (error) => {
-          console.error('Registration failed:', error); // Log error details
+    this.userToSave = this.registrationForm.value as GymUserRegistration;
+    this._userService.createUser(this.userToSave).subscribe({
+      next: () => {
+        this._toastr.success(`Successfully created account for ${this.userToSave?.name}`);
+      },
+      error: (error) => {
+        if (Array.isArray(error.error.message)) {
+          error.error.message.forEach((msg: string) => {
+            this._toastr.error(msg, 'Failed to create account');
+          });
+        } else {
+          this._toastr.error('Failed to create account', 'Error');
         }
-      });
-    } else {
-      console.log("Form isn't valid");
-      console.log(this.registrationForm.errors); // Log specific form errors
-    }
+      }
+    });
+
   }
 }

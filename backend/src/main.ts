@@ -11,12 +11,19 @@ async function bootstrap() {
     origin: "http://localhost:4200"
   });
 
-  useContainer(app.select(AppModule), { fallbackOnErrors: true });  
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
   const config = new DocumentBuilder()
     .setTitle("Gym-fit")
     .setDescription("Gym-fit API")
     .setVersion("1.0")
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      description: 'Enter JWT'
+    },
+      'JWT')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

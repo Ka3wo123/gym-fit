@@ -6,15 +6,24 @@ import { GymUser } from 'src/entities/gym-user.entity';
 import { AuthService } from 'src/auth/auth.service';
 import { AuthModule } from 'src/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { Training } from 'src/entities/training.entity';
 
 @Module({
-  imports: [   
+  imports: [
     forwardRef(() => AuthModule),
-    JwtModule,    
-    TypeOrmModule.forFeature([GymUser])
+    JwtModule,
+    TypeOrmModule.forFeature([
+      GymUser,
+      Training])
   ],
-  controllers: [GymUserController],
-  providers: [GymUserService, AuthService],
-  exports: [GymUserService]
+  controllers: [
+    GymUserController
+  ],
+  providers: [
+    GymUserService,
+    AuthService],
+  exports: [
+    GymUserService
+  ]
 })
-export class GymUsersModule {}
+export class GymUsersModule { }

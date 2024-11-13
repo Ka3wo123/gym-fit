@@ -1,13 +1,16 @@
 .login-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-  }
-  
-  mat-card {
-    padding: 20px;
-    width: 100%;
-    max-width: 400px;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+mat-card {
+  padding: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+button {
+  margin-left: 20px;
+}
