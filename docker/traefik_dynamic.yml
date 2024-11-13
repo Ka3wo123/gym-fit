@@ -1,0 +1,24 @@
+http:
+  routers:
+    angular-router:
+      rule: "PathPrefix(`/`)"
+      service: angular-service
+      entrypoints:
+        - web
+    nestjs-router:
+      rule: "PathPrefix(`/api`)"
+      service: nestjs-service
+      entrypoints:
+        - web
+
+  services:
+    nestjs-service:
+      loadBalancer:
+        servers:
+          - url: "http://nestjs:3000"
+    angular-service:
+      loadBalancer:
+        servers:
+          - url: "http://angular:4200"
+
+          

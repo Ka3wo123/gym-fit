@@ -1,0 +1,28 @@
+api:
+  dashboard: true
+  insecure: true
+
+log:
+  level: DEBUG
+
+ping:
+  entryPoint: metrics
+
+metrics:
+  prometheus:
+    entryPoint: metrics
+
+entryPoints:
+  web:
+    address: :3002
+    forwardedHeaders:
+      insecure: true
+    transport:
+      lifeCycle:
+        requestAcceptGraceTimeout: 10s
+  metrics:
+    address: :9090
+
+providers:
+  file:
+    filename: /etc/traefik/traefik_dynamic.yml

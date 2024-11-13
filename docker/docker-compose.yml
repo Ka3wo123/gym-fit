@@ -1,0 +1,44 @@
+services:
+  mariadb:
+    container_name: mariadb-gym-fit-docker
+    ports:
+      - 3306:3306
+    image: mariadb:11.2
+    environment:
+      - MARIADB_USER=root
+      - MARIADB_ROOT_PASSWORD=password      
+      - MARIADB_DATABASE=gym-fitness
+    restart: unless-stopped
+
+  nestjs:
+    container_name: nestjs-gym-fit
+    ports:
+      - 3000:3000
+    build:
+      context: ../backend
+    environment:
+      - NODE_ENV=production
+      - DB_HOST=mariadb
+      - DB_PORT=3306
+      - DB_USERNAME=root
+      - DB_PASSWORD=password
+      - DB_NAME=gym-fitness
+    depends_on:
+      - mariadb
+
+  angular:
+    container_name: angular-gym-fit
+    depends_on:
+      - nestjs
+    build:
+      context: ../frontend
+
+  
+  traefik:
+    container_name: traefik-docker
+    image: traefik:2.11.8
+    ports:
+      - 3002:3002      
+    volumes:
+      - ./traefik.yml:/etc/traefik/traefik.yml
+      - ./traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml
