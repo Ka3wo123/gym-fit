@@ -1,21 +1,43 @@
 <div class="login-container">
-    <mat-card>
-      <h1>Login</h1>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <mat-form-field appearance="fill">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email" required>
-          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">Invalid email</mat-error>
-        </mat-form-field>
+  <mat-card>
+    <h1>Login</h1>
+    
+    <mat-tab-group (selectedIndexChange)="onTabChange($event)">
+      <mat-tab label="User">
+        <form [formGroup]="userLoginForm" (ngSubmit)="onSubmit('user')">
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" required>
+            <mat-error *ngIf="userLoginForm.get('email')?.hasError('email')">Invalid email</mat-error>
+          </mat-form-field>
   
-        <mat-form-field appearance="fill">
-          <mat-label>Password</mat-label>
-          <input matInput formControlName="password" type="password" required>
-          <mat-error *ngIf="loginForm.get('password')?.invalid">Password is required</mat-error>
-        </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password" required>
+            <mat-error *ngIf="userLoginForm.get('password')?.invalid">Password is required</mat-error>
+          </mat-form-field>
   
-        <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Login</button>
-      </form>
-    </mat-card>
-  </div>
+          <button mat-raised-button color="primary" type="submit" [disabled]="userLoginForm.invalid">Login as User</button>
+        </form>
+      </mat-tab>
+      
+      <mat-tab label="Trainer">
+        <form [formGroup]="userLoginForm" (ngSubmit)="onSubmit('trainer')">
+          <mat-form-field appearance="fill">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" required>
+            <mat-error *ngIf="userLoginForm.get('email')?.hasError('email')">Invalid email</mat-error>
+          </mat-form-field>
   
+          <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password" type="password" required>
+            <mat-error *ngIf="userLoginForm.get('password')?.invalid">Password is required</mat-error>
+          </mat-form-field>
+  
+          <button mat-raised-button color="primary" type="submit" [disabled]="userLoginForm.invalid">Login as Trainer</button>
+        </form>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card>
+</div>

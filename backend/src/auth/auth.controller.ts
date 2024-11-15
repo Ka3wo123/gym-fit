@@ -10,12 +10,17 @@ export class AuthController {
     constructor(private readonly _authService: AuthService) { }
 
     @Post('login')
-    async login(@Body() gymUser: AuthGymUserDto) {
-        const token = await this._authService.authenticateUser(gymUser);
+    public async login(@Body() gymUser: AuthGymUserDto) {
+        const tokens = await this._authService.authenticateUser(gymUser);
         return {
             statusCode: 200,
-            ...token,
+            ...tokens,
         };
+    }
+
+    @Post('refresh')
+    public refreshToken(@Body('refreshToken') refreshToken: string) {
+        return this._authService.refreshAccessToken(refreshToken);
     }
 
     @Post('register')

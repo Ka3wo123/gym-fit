@@ -1,10 +1,16 @@
 <mat-toolbar color="primary" class="navbar">
-    <span>Gym-fit</span>
-    <span class="spacer"></span>
-    <nav>
-      <a mat-button routerLink="/">Home</a>
-      <a mat-button routerLink="/login">Login</a>
-      <a mat-button routerLink="/register">Register</a>
-      <a mat-button routerLink="/users">Users</a>
-    </nav>
-  </mat-toolbar>
+  <span>Gym-fit</span>
+  <span class="spacer"></span>
+  <nav>
+    <a mat-button routerLink="/">Home</a>
+    
+    <a *ngIf="!isLoggedIn" mat-button routerLink="/login">Login</a>
+    <a *ngIf="!isLoggedIn" mat-button routerLink="/register">Register</a>
+
+    <a *ngIf="isLoggedIn" mat-button (click)="onLogout()">Logout</a>
+
+    <a *ngIf="isLoggedIn && isTrainer" mat-button routerLink="/trainings/add">Add training</a>
+
+    <a mat-button routerLink="/users">Users</a>
+  </nav>
+</mat-toolbar>

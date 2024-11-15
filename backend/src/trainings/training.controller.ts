@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { TrainingService } from './training.service';
 import { WorkoutType } from 'src/types/workout-type.enum';
 import { Training } from 'src/entities/training.entity';
@@ -11,6 +11,7 @@ import { UUID } from 'crypto';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UpdateTrainingDto } from 'src/dtos/updateTraining.dto';
+import { Validate } from 'class-validator';
 
 @ApiTags('Trainings')
 @Controller('trainings')
@@ -22,7 +23,7 @@ export class TrainingController {
     public async getTrainings(
         @Query('name') name?: string,
         @Query('workoutType') workoutType?: WorkoutType
-    ): Promise<{ status: number, data: Training[] }> {
+    ): Promise<{ status: number, data: TrainingDto[] }> {
         const trainings = await this._trainingService.getTrainings(name, workoutType);
         return {
             status: 200,
@@ -38,7 +39,7 @@ export class TrainingController {
     @Post()
     @Roles(Role.TRAINER)
     @UseGuards(AuthGuard, RolesGuard)
-    public async addTraining(@Body() training: TrainingDto): Promise<{ status: number, data: Training }> {
+    public async addTraining(@Body(new ValidationPipe) training: TrainingDto): Promise<{ status: number, data: TrainingDto }> {
         const data = await this._trainingService.addTraining(training);
         return {
             status: 201,
@@ -49,7 +50,7 @@ export class TrainingController {
     @Put(':trainingId')
     @Roles(Role.ADMIN, Role.TRAINER)
     @UseGuards(AuthGuard, RolesGuard)
-    public async updateTraining(@Param('trainingId') id: UUID, @Body() trainingDto: UpdateTrainingDto ): Promise<{ status: number, data: UpdateResult }> {
+    public async updateTraining(@Param('trainingId') id: UUID, @Body() trainingDto: UpdateTrainingDto): Promise<{ status: number, data: UpdateResult }> {
         const result = await this._trainingService.updateTraining(id, trainingDto);
 
         return {

@@ -1,13 +1,13 @@
-body {
-    background: linear-gradient(to right, #130e3f, #5b4b5e);
-}
-
 .toast-success {
     background-color: #4caf50;
     color: #fff;
+    position: absolute;
+    top: 70px;
 }
 
 .toast-error {
     background-color: #f44336;
     color: #fff;
+    position: absolute;
+    top: 70px;
 }

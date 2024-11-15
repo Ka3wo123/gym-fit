@@ -1,4 +1,4 @@
-export default interface GymUserAuth {
+export default interface UserAuth {
     email: string,
     password: string
 }

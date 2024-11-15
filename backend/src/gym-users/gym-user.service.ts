@@ -6,6 +6,7 @@ import { GymUserDto } from 'src/dtos/gym-user.dto';
 import { GymUser } from 'src/entities/gym-user.entity';
 import { Training } from 'src/entities/training.entity';
 import { AlreadyAssignException } from 'src/exceptions/CustomExceptions';
+import { Role } from 'src/types/roles.enum';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -15,8 +16,14 @@ export class GymUserService {
         @InjectRepository(Training) private readonly _trainingRepo: Repository<Training>
     ) { }
 
-    public getAllUsers(): Observable<GymUserDto[]> {
-        return from(this._gymUserRepo.find()).pipe(
+    public getAllUsers(role?: Role): Observable<GymUserDto[]> {
+        const query = this._gymUserRepo.createQueryBuilder('gym_user');
+
+        if(role) {
+            query.where('gym_user.role LIKE :role', { role: role })
+        }
+
+        return from(query.getMany()).pipe(
             map((users: GymUser[]) => users.map(user => this.toDto(user)))
         );
     }
@@ -25,11 +32,10 @@ export class GymUserService {
         const user = await this._gymUserRepo.findOneBy({ email });
 
         return user ? this.toDto(user) : null;
-
     }
 
-    public async assignUserToTraining(userId: UUID, trainingId: UUID): Promise<Training> {
-        const user = await this._gymUserRepo.findOneBy({ id: userId });
+    public async assignUserToTraining(email: string, trainingId: UUID): Promise<Training> {
+        const user = await this._gymUserRepo.findOneBy({ email: email });
 
         if (!user) {
             throw new NotFoundException('User not found');
@@ -57,6 +63,19 @@ export class GymUserService {
         return training;
     }
 
+    public async getTrainingsForUser(userId: UUID): Promise<Training[]> {
+        const user = await this._gymUserRepo.findOne({
+            where: { id: userId },
+            relations: ['trainings']
+        });
+
+        if (!user) {
+            throw new NotFoundException('User not found');
+        }
+
+        return user.trainings;
+    }
+
     private toDto(user: GymUser): GymUserDto {
         return {
             id: user.id,
@@ -67,10 +86,5 @@ export class GymUserService {
             age: user.age,
             role: user.role
         }
-
     }
-
-
-
-
 }

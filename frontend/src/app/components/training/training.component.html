@@ -1,0 +1,17 @@
+<div class="trainings-container">
+    <h1>Trainings</h1>
+  
+    <span *ngIf="trainings.length === 0" class="no-trainings">No trainings available at the moment</span>
+  
+    <ul>
+      <li *ngFor="let training of trainings">
+        <h3>{{ training.name }}</h3>
+        <p><strong>Date:</strong> {{ training.dateStart | date: 'longDate' }}</p>
+  
+        <button mat-raised-button color="primary" (click)="assignToTraining(training.id.toString())">
+          Assign to Training
+        </button>
+      </li>
+    </ul>
+  </div>
+  

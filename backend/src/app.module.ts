@@ -27,10 +27,7 @@ const options: TypeOrmModuleOptions = {
     GymUsersModule,
     TrainingModule,
     AuthModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: '1d' },
-    }),
+    JwtModule,
     ConfigModule.forRoot({
       isGlobal: true
     })],
@@ -42,12 +39,4 @@ const options: TypeOrmModuleOptions = {
   ]
 })
 export class AppModule {
-constructor() {
-  console.log(process.env.DB_HOST)
-  console.log(process.env.DB_PORT)
-  console.log(process.env.DB_USERNAME)
-  console.log(process.env.DB_PASSWORD)
-  console.log(process.env.DB_NAME)
-  console.log(process.env.NODE_ENV)
-}
 }

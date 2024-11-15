@@ -1,13 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { from } from 'rxjs';
 import { AuthGymUserDto } from 'src/dtos/auth-gym-user.dto';
 import { RegisterGymUserDto } from 'src/dtos/register-gym-user.dto';
 import { GymUser } from 'src/entities/gym-user.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { v4 as uuid } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { Role } from 'src/types/roles.enum';
 import { GymUserDto } from 'src/dtos/gym-user.dto';
@@ -34,11 +32,17 @@ export class AuthService {
 
         if (isPasswordMatch) {
             const jwtToken = await this._jwt.signAsync({
-                email,
+                email: user.email,
                 role: user.role
             });
-            
-            const refreshToken = uuid();
+
+            const refreshToken = await this._jwt.signAsync({
+                email: user.email,
+                role: user.role
+            }, {
+                secret: this._configService.get<string>('JWT_REFRESH_SECRET_KEY'),
+                expiresIn: '30d'
+            })
 
             user.refreshToken = refreshToken;
             await this._gymUserRepo.save(user);
@@ -65,6 +69,30 @@ export class AuthService {
         this._gymUserRepo.create(userToSave);
 
         return this._gymUserRepo.save(userToSave);
+    }
+
+
+    public async refreshAccessToken(refreshToken: string) {
+        this.validateToken(refreshToken);
+
+        const user = await this._gymUserRepo.findOneBy({ refreshToken });
+
+        if (!user) {
+            throw new ForbiddenException('Invalid refresh token');
+        }
+
+        const newAccessToken = await this._jwt.signAsync(
+            {
+                email: user.email,
+                role: user.role
+            },
+            {
+                secret: this._configService.get<string>('JWT_SECRET_KEY'),
+                expiresIn: '1d'
+            }
+        );
+
+        return { accessToken: newAccessToken };
     }
 
     public validateToken(token: string) {

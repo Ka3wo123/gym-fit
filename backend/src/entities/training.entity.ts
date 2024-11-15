@@ -14,7 +14,7 @@ export class Training {
     @Column({ type: 'enum', enum: WorkoutType, default: null })
     workoutType: WorkoutType;
     @Column({ nullable: true })
-    capacity: number;
+    capacity: number;  
     @ManyToMany(() => GymUser, (user) => user.trainings)
     users: GymUser[];
 

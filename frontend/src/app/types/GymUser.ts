@@ -1,3 +1,4 @@
+import { Role } from "./Role"
 import { WorkoutType } from "./WorkoutType"
 
 export default interface GymUser {
@@ -5,5 +6,6 @@ export default interface GymUser {
     surname: string,
     email: string,
     workoutType: WorkoutType,
-    age: number
+    age: number,
+    role: Role
 }
