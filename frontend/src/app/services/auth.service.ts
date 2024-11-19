@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import AuthResponse from '../types/AuthResponse';
 import UserAuth from '../types/UserAuth';
 import GymUserRegistration from '../types/GymUserRegistration';
 import TrainerDto from '../types/TrainerDto';
 import { jwtDecode } from 'jwt-decode';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root',
@@ -13,28 +14,46 @@ import { jwtDecode } from 'jwt-decode';
 export class AuthService {
 
     private prefixURL: string = '/api/auth';
-    constructor(private http: HttpClient) { }
+    _authStatus = new BehaviorSubject<boolean>(false);
+    _roleStatus = new BehaviorSubject<string>('');
+    
+    constructor(
+        private readonly _http: HttpClient,
+        private readonly router: Router
+
+    ) { 
+        this.initializeAuthState();
+    }
+
+    private initializeAuthState(): void {
+        const token = this.getAccessToken();
+        if (token && !this.isTokenExpired(token)) {
+            this._authStatus.next(true);
+            this._roleStatus.next(this.getUserRole());
+        }
+    }
 
     public refresh(refreshToken: string): Observable<any> {
-        return this.http.post<any>(`${this.prefixURL}/refresh`, { refreshToken });
+        return this._http.post<any>(`${this.prefixURL}/refresh`, { refreshToken });
     }
 
     public authenticateUser(user: UserAuth): Observable<AuthResponse> {
-        return this.http.post<AuthResponse>(`/api/auth/login`, user);
+        return this._http.post<AuthResponse>(`/api/auth/login`, user).pipe(
+            tap((response: AuthResponse) => {
+                this.setTokens(response.token, response.refreshToken);
+                this._authStatus.next(true);
+                this._roleStatus.next(this.getUserRole());
+            })
+        );
 
     }
 
     public createUser(user: GymUserRegistration) {
-        return this.http.post<GymUserRegistration>(`/api/auth/register`, user);
+        return this._http.post<GymUserRegistration>(`/api/auth/register`, user);
     }
 
     public createTrainer(trainer: TrainerDto) {
-        return this.http.post<TrainerDto>(`/api/auth/register`, trainer);
-    }
-
-    public isLoggedIn(): boolean {
-        const token = localStorage.getItem('refreshToken');
-        return !!token && !this.isTokenExpired(token);
+        return this._http.post<TrainerDto>(`/api/auth/register`, trainer);
     }
 
     public getUserRole(): string {
@@ -80,6 +99,9 @@ export class AuthService {
     clearTokens(): void {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
+        this._authStatus.next(false);
+        this._roleStatus.next('');
+        this.router.navigate(['/']);
     }
 }
 

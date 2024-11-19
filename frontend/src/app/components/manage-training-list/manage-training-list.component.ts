@@ -33,6 +33,9 @@ export class ManageTrainingListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadTrainings();
+    this._trainingService.trainingUpdate$.subscribe(() => {
+      this.loadTrainings();
+    });
   }
 
   loadTrainings(): void {

@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Training } from '../types/Training';
+import { Observable, Subject, tap } from 'rxjs';
 import TrainingResponse from '../types/TrainingResponse';
 import TrainingDto from '../types/TrainingDto';
-import { AuthService } from './auth.service';
-import extractData from '../utils/token-extractor';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +10,10 @@ import extractData from '../utils/token-extractor';
 export class TrainingService {
 
   private prefixURL: string = '/api/trainings';
+  private trainingUpdate = new Subject<void>();
+  trainingUpdate$ = this.trainingUpdate.asObservable();
+
   constructor(private http: HttpClient,
-    private readonly _authService: AuthService
   ) { }
 
   getTrainings(): Observable<TrainingResponse> {
@@ -22,11 +21,13 @@ export class TrainingService {
   }
 
   addTraining(email: string, training: TrainingDto) {
-    const headers = this.getAuthHeaders();        
-    
+    const headers = this.getAuthHeaders();
+
     return this.http.post(`${this.prefixURL}?email=${email}`, training, {
       headers
-    });
+    }).pipe(
+      tap(() => this.trainingUpdate.next())
+    );
   }
 
 
@@ -41,9 +42,7 @@ export class TrainingService {
     const headers = this.getAuthHeaders();
     return this.http.delete(`${this.prefixURL}/${id}`, {
       headers
-    }
-
-    )
+    })
   }
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken');

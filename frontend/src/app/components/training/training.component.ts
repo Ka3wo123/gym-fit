@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Training } from '../../types/Training';
 import { TrainingService } from '../../services/training.service';
 import { CommonModule } from '@angular/common';
 import { GymUserService } from '../../services/gym-user.service';
@@ -48,6 +47,7 @@ export class TrainingComponent implements OnInit {
     this._userService.assignUserToTraining(userId, trainingId).subscribe({
       next: () => {
         this._toastr.success('Assigned to training');
+        this._trainingService.getTrainings().subscribe(response => this.trainings = response.data)
       },
       error: (error) => {
         if (error.status == 409) {

@@ -23,27 +23,15 @@ export class NavbarComponent implements OnInit {
   isTrainer: boolean = false;
 
   constructor(
-    private _authService: AuthService,
-    private _cdRef: ChangeDetectorRef
+    private _authService: AuthService
   ) { }
 
   ngOnInit(): void {
-    this.checkUserStatus();
-  }
-
-  checkUserStatus() {
-    this.isLoggedIn = this._authService.isLoggedIn();
-
-    this.isTrainer = this._authService.getUserRole() === 'trainer';
-
-    this._cdRef.detectChanges();
+    this._authService._authStatus.subscribe(status => this.isLoggedIn = status);
+    this._authService._roleStatus.subscribe(role => this.isTrainer = role.includes('trainer'));
   }
 
   onLogout() {
     this._authService.clearTokens();
-    this.isLoggedIn = false;
-    this.isTrainer = false;
-
-    this._cdRef.detectChanges();
   }
 }
