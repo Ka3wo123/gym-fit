@@ -6,11 +6,12 @@
     
     <a *ngIf="!isLoggedIn" mat-button routerLink="/login">Login</a>
     <a *ngIf="!isLoggedIn" mat-button routerLink="/register">Register</a>
-
+    <a mat-button routerLink="/users">Users</a>
+    <a *ngIf="isLoggedIn && !isTrainer" mat-button routerLink="/trainings/user">Your trainings</a>  
+    
     <a *ngIf="isLoggedIn" mat-button (click)="onLogout()">Logout</a>
 
-    <a *ngIf="isLoggedIn && isTrainer" mat-button routerLink="/trainings/add">Add training</a>
+    <a *ngIf="isLoggedIn && isTrainer" mat-button routerLink="/trainings/manage">Manage trainings</a>    
 
-    <a mat-button routerLink="/users">Users</a>
   </nav>
 </mat-toolbar>

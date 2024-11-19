@@ -15,7 +15,10 @@ export class Training {
     workoutType: WorkoutType;
     @Column({ nullable: true })
     capacity: number;  
-    @ManyToMany(() => GymUser, (user) => user.trainings)
+    @ManyToMany(() => GymUser, (user) => user.trainings, {
+        cascade: true,
+        onDelete: 'CASCADE'
+    })
     users: GymUser[];
 
 }

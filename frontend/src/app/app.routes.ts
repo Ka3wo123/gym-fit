@@ -3,7 +3,8 @@ import { LoginComponent } from './components/login/login.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { HomeComponent } from './components/home/home.component';
 import { TrainingComponent } from './components/training/training.component';
-import { AddTrainingComponent } from './components/add-training/add-training.component';
+import { ManageTrainingComponent } from './components/manage-training/manage-training.component';
+import { UserTrainingsComponent } from './components/user-trainings/user-trainings.component';
 
 export const routes: Routes = [
     {
@@ -31,8 +32,12 @@ export const routes: Routes = [
         component: TrainingComponent
     },
     {
-        path: 'trainings/add',
-        component: AddTrainingComponent
+        path: 'trainings/manage',
+        component: ManageTrainingComponent
+    },
+    {
+        path: 'trainings/user',
+        component: UserTrainingsComponent
     },
     {
         path: '',

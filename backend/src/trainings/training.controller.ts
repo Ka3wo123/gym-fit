@@ -39,14 +39,15 @@ export class TrainingController {
     @Post()
     @Roles(Role.TRAINER)
     @UseGuards(AuthGuard, RolesGuard)
-    public async addTraining(@Body(new ValidationPipe) training: TrainingDto): Promise<{ status: number, data: TrainingDto }> {
-        const data = await this._trainingService.addTraining(training);
+    public async addTraining(@Query('email') email: string, @Body(new ValidationPipe) training: TrainingDto): Promise<{ status: number, data: TrainingDto }> {
+        const data = await this._trainingService.addTraining(email, training);
         return {
             status: 201,
             data: data
         }
     }
 
+    @ApiBearerAuth('JWT')
     @Put(':trainingId')
     @Roles(Role.ADMIN, Role.TRAINER)
     @UseGuards(AuthGuard, RolesGuard)
@@ -59,6 +60,7 @@ export class TrainingController {
         }
     }
 
+    @ApiBearerAuth('JWT')
     @Delete(':trainingId')
     @Roles(Role.ADMIN, Role.TRAINER)
     @UseGuards(AuthGuard, RolesGuard)

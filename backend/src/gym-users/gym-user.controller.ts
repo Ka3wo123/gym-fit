@@ -19,8 +19,7 @@ export class GymUserController {
     @ApiOperation({
         summary: 'Get all gym users',
         description: 'This endpoint can only be accessed by users with the Admin, Trainer or User role.',
-    })
-    @ApiBearerAuth('JWT')
+    })    
     @Get()
     public getAllUsers(@Query('role') role?: Role): Observable<{ statusCode: number, data: GymUserDto[] }> {
         return this._gymUserService.getAllUsers(role).pipe(
@@ -60,6 +59,7 @@ export class GymUserController {
         };
     }
 
+    @ApiBearerAuth('JWT')
     @Get('/:userId/training/:trainingId')
     @Roles(Role.USER, Role.ADMIN)
     @UseGuards(AuthGuard, RolesGuard)
@@ -67,10 +67,11 @@ export class GymUserController {
         return this._gymUserService.assignUserToTraining(email, trainingId);
     }
 
-    @Get('/:userId/trainings')
-    @Roles(Role.ADMIN, Role.USER)
+    @ApiBearerAuth('JWT')
+    @Get('/:email/trainings')
+    @Roles(Role.ADMIN, Role.USER, Role.TRAINER)
     @UseGuards(AuthGuard, RolesGuard)
-    public async getTrainingsForUser(@Param('userId') userId: UUID) {
-        return this._gymUserService.getTrainingsForUser(userId);
+    public async getTrainingsForUser(@Param('email') email: string) {
+        return this._gymUserService.getTrainingsForUser(email);
     }
 }

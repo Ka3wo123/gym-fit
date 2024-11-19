@@ -1,0 +1,90 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    padding: 20px;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+  }
+  
+  mat-card {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .training-card-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 20px;
+  }
+  
+  .training-card {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  mat-card-header {
+    padding-bottom: 16px;
+  }
+  
+  mat-card-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  mat-card-subtitle {
+    font-size: 1.2rem;
+    color: #777;
+  }
+  
+  mat-card-content {
+    margin-top: 10px;
+  }
+  
+  mat-card-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+  }
+  
+  button {
+    font-size: 14px;
+  }
+  
+  button.mat-button {
+    border-radius: 5px;
+    padding: 8px 16px;
+  }
+  
+  button.mat-button.color-primary {
+    background-color: #1976d2;
+    color: #fff;
+  }
+  
+  button.mat-button.color-primary:hover {
+    background-color: #1565c0;
+  }
+  
+  button.mat-button.color-warn {
+    background-color: #f44336;
+    color: #fff;
+  }
+  
+  button.mat-button.color-warn:hover {
+    background-color: #d32f2f;
+  }
+  

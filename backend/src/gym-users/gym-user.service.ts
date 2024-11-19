@@ -5,7 +5,7 @@ import { from, map, Observable } from 'rxjs';
 import { GymUserDto } from 'src/dtos/gym-user.dto';
 import { GymUser } from 'src/entities/gym-user.entity';
 import { Training } from 'src/entities/training.entity';
-import { AlreadyAssignException } from 'src/exceptions/CustomExceptions';
+import { AlreadyAssignException, MaxCapacityException } from 'src/exceptions/CustomExceptions';
 import { Role } from 'src/types/roles.enum';
 import { Repository } from 'typeorm';
 
@@ -19,7 +19,7 @@ export class GymUserService {
     public getAllUsers(role?: Role): Observable<GymUserDto[]> {
         const query = this._gymUserRepo.createQueryBuilder('gym_user');
 
-        if(role) {
+        if (role) {
             query.where('gym_user.role LIKE :role', { role: role })
         }
 
@@ -56,6 +56,15 @@ export class GymUserService {
             throw new AlreadyAssignException('User is already assigned to this training');
         }
 
+        const usersCount = await this._trainingRepo.query(
+            `SELECT COUNT(*) as count FROM user_trainings WHERE training_id = ?`,
+            [trainingId]
+        );
+
+        if (training.capacity && usersCount[0].count > training.capacity) {
+            throw new MaxCapacityException('Full capacity for this training');
+        }
+
         training.users.push(user);
 
         await this._trainingRepo.save(training);
@@ -63,9 +72,9 @@ export class GymUserService {
         return training;
     }
 
-    public async getTrainingsForUser(userId: UUID): Promise<Training[]> {
+    public async getTrainingsForUser(email: string): Promise<Training[]> {
         const user = await this._gymUserRepo.findOne({
-            where: { id: userId },
+            where: { email: email },
             relations: ['trainings']
         });
 

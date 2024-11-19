@@ -1,11 +1,11 @@
 import { Type } from "class-transformer";
-import { IsDate, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
+import { IsBoolean, IsDate, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID } from "class-validator";
 import { UUID } from "crypto";
 import { WorkoutType } from "src/types/workout-type.enum";
 
 export class TrainingDto {
-    @IsNotEmpty()
     @IsUUID()
+    @IsOptional()
     id: UUID;
     @IsString()
     @IsNotEmpty()
@@ -19,5 +19,8 @@ export class TrainingDto {
     workoutType?: WorkoutType;
     @IsOptional()
     @IsNumber()
-    capacity: number;    
+    capacity: number;
+    @IsNumber()
+    @IsOptional()
+    freeSpaces: number;   
 }

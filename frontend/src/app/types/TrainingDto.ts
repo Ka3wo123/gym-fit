@@ -1,6 +1,8 @@
 export default interface TrainingDto {
+    id: string,
     name: string,
     dateStart: Date,
     workoutType: string,
-    capacity?: number
+    capacity?: number,
+    freeSpaces: number
 }

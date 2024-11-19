@@ -18,16 +18,13 @@ export class GymUser {
     password: string;
     @Column({ nullable: true })
     age?: number;
-    @Column({ nullable: true })
+    @Column({ type: 'enum', enum: WorkoutType, nullable: true })
     workoutType?: WorkoutType;
     @Column({ nullable: true })
     refreshToken: string;
     @Column({ type: 'enum', enum: Role, default: Role.USER })    
     role: Role;
-    @ManyToMany(() => Training, (training) => training.users, {
-        cascade: true,
-        onDelete: 'CASCADE'
-    })
+    @ManyToMany(() => Training, (training) => training.users)
     @JoinTable({
         name: 'user_trainings',
         joinColumn: {

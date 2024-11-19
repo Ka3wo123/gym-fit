@@ -7,14 +7,16 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { ToastrModule } from 'ngx-toastr';
+import { ToastrService } from 'ngx-toastr';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { WorkoutType } from '../../types/WorkoutType';
+import extractData from '../../utils/token-extractor';
 
 @Component({
   selector: 'app-add-training',
   standalone: true,
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatDatepickerModule,
@@ -31,8 +33,12 @@ export class AddTrainingComponent {
   trainingForm: FormGroup;
   workoutTypes = Object.values(WorkoutType);
 
-  constructor(private fb: FormBuilder, private trainingService: TrainingService) {
-    this.trainingForm = this.fb.group({
+  constructor(
+    private readonly _fb: FormBuilder,
+    private readonly _trainingService: TrainingService,
+    private readonly _toastr: ToastrService
+  ) {
+    this.trainingForm = this._fb.group({
       name: ['', Validators.required],
       workoutType: ['', Validators.required],
       dateStart: ['', Validators.required],
@@ -42,15 +48,19 @@ export class AddTrainingComponent {
 
   onSubmit(): void {
     if (this.trainingForm.valid) {
-      this.trainingService.addTraining(this.trainingForm.value).subscribe({
-        next: (response) => {
-          console.log('Training added successfully:', response);
-          this.trainingForm.reset();
-        },
-        error: (error) => {
-          console.error('Error adding training:', error);
-        }
-      });
+      const token = extractData();
+      if (token?.email) {
+        this._trainingService.addTraining(token.email, this.trainingForm.value).subscribe({
+          next: () => {
+            this._toastr.success('Training added successfully');
+          },
+          error: () => {
+            this._toastr.error('Error adding training');
+          }
+        });
+      } else {
+        console.log("Email not found")
+      }
     }
   }
 }

@@ -5,6 +5,7 @@ import { Training } from '../types/Training';
 import TrainingResponse from '../types/TrainingResponse';
 import TrainingDto from '../types/TrainingDto';
 import { AuthService } from './auth.service';
+import extractData from '../utils/token-extractor';
 
 @Injectable({
   providedIn: 'root'
@@ -20,19 +21,36 @@ export class TrainingService {
     return this.http.get<TrainingResponse>(`${this.prefixURL}`);
   }
 
-  addTraining(training: TrainingDto) {
-    const headers = this.getAuthHeaders();
-    return this.http.post(`${this.prefixURL}`, training, {
+  addTraining(email: string, training: TrainingDto) {
+    const headers = this.getAuthHeaders();        
+    
+    return this.http.post(`${this.prefixURL}?email=${email}`, training, {
       headers
     });
   }
 
- 
 
+  updateTraining(id: string, trainingToUpdate: TrainingDto) {
+    const headers = this.getAuthHeaders();
+    return this.http.put(`${this.prefixURL}/${id}`, trainingToUpdate, {
+      headers
+    })
+  }
+
+  deleteTraining(id: string) {
+    const headers = this.getAuthHeaders();
+    return this.http.delete(`${this.prefixURL}/${id}`, {
+      headers
+    }
+
+    )
+  }
   private getAuthHeaders(): HttpHeaders {
     const token = localStorage.getItem('accessToken');
     return new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
   }
+
+
 }

@@ -7,6 +7,9 @@ import { AuthService } from '../../services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
 import { ToastrService } from 'ngx-toastr';
 import { MatIconModule } from '@angular/material/icon';
+import { jwtDecode } from 'jwt-decode';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import TrainingDto from '../../types/TrainingDto';
 
 @Component({
   selector: 'app-training',
@@ -14,38 +17,45 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatTooltipModule,
   ],
   templateUrl: './training.component.html',
   styleUrl: './training.component.scss'
 })
 export class TrainingComponent implements OnInit {
-  trainings: Training[] = [];
+  trainings: TrainingDto[] = [];
+  isTrainer: boolean = false;
 
-  constructor(private trainingService: TrainingService,
-    private userService: GymUserService,
-    private authService: AuthService,
-    private toastr: ToastrService
+  constructor(
+    private readonly _trainingService: TrainingService,
+    private readonly _userService: GymUserService,
+    private readonly _authService: AuthService,
+    private readonly _toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
-    this.trainingService.getTrainings().subscribe(response => this.trainings = response.data)
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      const decoded: { role: string } = jwtDecode(token);
+      this.isTrainer = decoded.role.includes('trainer');
+    }
+    this._trainingService.getTrainings().subscribe(response => this.trainings = response.data)
   }
 
   assignToTraining(trainingId: string): void {
-    console.log(trainingId)
-    const userId = this.authService.getEmail();
-    this.userService.assignUserToTraining(userId, trainingId).subscribe({
-      next: (training) => {
-        this.toastr.success('Assigned to training');
+    const userId = this._authService.getEmail();
+    this._userService.assignUserToTraining(userId, trainingId).subscribe({
+      next: () => {
+        this._toastr.success('Assigned to training');
       },
       error: (error) => {
         if (error.status == 409) {
-          this.toastr.warning('User already assigned to this training');
+          this._toastr.warning('User already assigned to this training');
         } else if (error.status === 403) {
-          this.toastr.error('You have to login first');
+          this._toastr.error('You have to login first');
         } else {
-          this.toastr.error('Some error occured');
+          this._toastr.error('Some error occured');
         }
 
       }

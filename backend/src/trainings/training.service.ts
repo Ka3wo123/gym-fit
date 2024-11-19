@@ -7,11 +7,13 @@ import { TrainingDto } from 'src/dtos/training.dto';
 import { UUID } from 'crypto';
 import { UpdateTrainingDto } from 'src/dtos/updateTraining.dto';
 import { plainToClass } from 'class-transformer';
+import { GymUserService } from 'src/gym-users/gym-user.service';
 
 @Injectable()
 export class TrainingService {
     constructor(
-        @InjectRepository(Training) private readonly _trainingRepo: Repository<Training>
+        @InjectRepository(Training) private readonly _trainingRepo: Repository<Training>,
+        private readonly _userService: GymUserService
     ) { }
 
     public async getTrainings(name?: string, workoutType?: WorkoutType): Promise<TrainingDto[]> {
@@ -27,22 +29,33 @@ export class TrainingService {
 
         const trainings = await queryBuilder.getMany();
 
-        return trainings.map(training => {
-            const dto = new TrainingDto();    
-            dto.id = training.id;        
-            dto.name = training.name;
-            dto.dateStart = training.dateStart;
-            dto.workoutType = training.workoutType;
-            dto.capacity = training.capacity;            
-            return dto;
-        });
+        return Promise.all(
+            trainings.map(async (training) => {
+                const dto = new TrainingDto();
+                dto.id = training.id;
+                dto.name = training.name;
+                dto.dateStart = training.dateStart;
+                dto.workoutType = training.workoutType;
+                dto.capacity = training.capacity;
+    
+                const result = await this._trainingRepo.query(
+                    `SELECT COUNT(*) as count FROM user_trainings WHERE training_id = ?`,
+                    [training.id]
+                );
+    
+                const count = result[0]?.count || 0;
+                dto.freeSpaces = training.capacity ? training.capacity - count + 1 : null;
+    
+                return dto;
+            })
+        );
     }
 
-    public async addTraining(createTrainingDto: TrainingDto): Promise<TrainingDto> {
+    public async addTraining(email: string, createTrainingDto: TrainingDto): Promise<TrainingDto> {
         const training = this._trainingRepo.create(createTrainingDto);
         const savedTraining = await this._trainingRepo.save(training);
+        this._userService.assignUserToTraining(email, training.id)
 
-        // Map the entity to DTO and return
         return plainToClass(TrainingDto, savedTraining);
     }
 

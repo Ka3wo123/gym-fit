@@ -1,0 +1,47 @@
+<h2>Update {{ data.name }}</h2>
+
+<form [formGroup]="trainingForm" (ngSubmit)="onSave()">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Training Details</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field appearance="fill">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name" required />
+        <mat-error *ngIf="trainingForm.get('name')?.invalid">Name is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Workout Type</mat-label>
+        <mat-select formControlName="workoutType" required>
+          <mat-option *ngFor="let type of workoutTypes" [value]="type">
+            {{ type }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="trainingForm.get('workoutType')?.invalid">Workout type is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Start Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="dateStart" required />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="trainingForm.get('dateStart')?.invalid">Start date is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Capacity</mat-label>
+        <input matInput type="number" formControlName="capacity" />
+        <mat-error *ngIf="trainingForm.get('capacity')?.invalid">Capacity is required and must be greater than
+          0</mat-error>
+      </mat-form-field>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button color="primary" type="submit" [disabled]="trainingForm.invalid">Save</button>
+      <button mat-button color="warn" (click)="onCancel()">Cancel</button>
+    </mat-card-actions>
+  </mat-card>
+</form>

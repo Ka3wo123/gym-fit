@@ -4,6 +4,8 @@ import GymUserResponse from '../types/GymUserResponse';
 import { Role } from '../types/Role';
 import { Training } from '../types/Training';
 import { Observable } from 'rxjs';
+import TrainerDto from '../types/TrainerDto';
+import TrainingDto from '../types/TrainingDto';
 
 
 @Injectable({
@@ -23,15 +25,24 @@ export class GymUserService {
     });
   }
 
+  public getTrainingsForUser(email: string): Observable<TrainingDto[]> {
+    return this.http.get<TrainingDto[]>(`${this.prefixURL}/${email}/trainings`, {
+      headers: {
+        Authorization: `Bearer ${this.getToken()}`
+      }
+    })
+  }
+
   public assignUserToTraining(userId: string | null, trainingId: string): Observable<Training> {
-    const token = localStorage.getItem('accessToken');
     return this.http.get<Training>(`${this.prefixURL}/${userId}/training/${trainingId}`, {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${this.getToken()}`
       }
     });
   }
 
-
+  private getToken() {
+    return localStorage.getItem('accessToken');
+  }
 
 }

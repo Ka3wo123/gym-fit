@@ -12,12 +12,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 @Component({
   selector: 'app-trainer-list',
   standalone: true,
-  imports: [MatTableModule,
+  imports: [
+    MatTableModule,
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
     MatCardModule,
-    MatPaginatorModule],
+    MatPaginatorModule,
+  ],
   templateUrl: './trainer-list.component.html',
   styleUrl: './trainer-list.component.scss'
 })

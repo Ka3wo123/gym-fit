@@ -231,10 +231,10 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/material@^18.2.9":
-  version "18.2.9"
-  resolved "https://registry.npmjs.org/@angular/material/-/material-18.2.9.tgz"
-  integrity sha512-M2oCgPPIMMd6BLgEJCD+FvdC7gRDeCjj9yktNn3ctHmkKUWRvpJ3xRBH/WjVXb+9fPCCW1iNwZI7+bN1fHE7cA==
+"@angular/material@18.2.10":
+  version "18.2.10"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-18.2.10.tgz#05b607ec76afebd3178c0e08b680cb822c41dbc6"
+  integrity sha512-XZISsICpTOzq2qR9yUaWrAz9WZCAh/B457gq/ftkkiiafLwFCvbKur19FFUJO5GX+uVdo074133L85xreOkFFw==
   dependencies:
     tslib "^2.3.0"
 
