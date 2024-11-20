@@ -7,7 +7,7 @@ Kajetan Nowak
 Aplikacja gym-fit
 
 ## Opis projektu
-Aplikacja webowa Gym fit ma na celu dostarczenie użytkownikom informacji o treningach w danym obiekcie sportowym. \
+***Aplikacja webowa Gym fit ma na celu dostarczenie użytkownikom informacji o treningach w danym obiekcie sportowym.*** \
 Użytkownik, który chce zapisać się na dany trening musi zarejestrować się podając swoje dane osobowe, adres e-mail, hasło oraz, opcjonalnie, preferencje w typie treningów. Zalogowany użytkownik ma dostęp do treningów, na które się zapisał. \
 Trener, chcąc dodać lub zarządzać swoimi treningami musi utworzyć konto podając swoje dane osobowe, adres e-mail, hasło oraz być zalogowanym w systemie. Ma możliwość dodawania treningu podając nazwę, typ oraz datę treningu i opcjonalnie ilość dostępnych miejsc, aktualizacji danego treningu oraz jego usunięcia. Trenerzy nie mają możliwości zapisywania się na swoje lub inne treningi. \
 Administrator systemu musi zalogować się na fabrycznie ustawione dane - adres e-mail oraz hasło. Ma dostęp do wszystkich funkcji systemu oraz dodatkowo panelu administratora, z którego ma możliwość zarządzania użytkownikami i trenerami w systemie (blokowanie, usuwanie użytkowników etc.)
