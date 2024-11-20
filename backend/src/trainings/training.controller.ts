@@ -1,7 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards, ValidationPipe } from '@nestjs/common';
 import { TrainingService } from './training.service';
 import { WorkoutType } from 'src/types/workout-type.enum';
-import { Training } from 'src/entities/training.entity';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/types/roles.enum';
 import { RolesGuard } from 'src/guards/roles.guard';
@@ -11,7 +10,6 @@ import { UUID } from 'crypto';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UpdateTrainingDto } from 'src/dtos/updateTraining.dto';
-import { Validate } from 'class-validator';
 
 @ApiTags('Trainings')
 @Controller('trainings')

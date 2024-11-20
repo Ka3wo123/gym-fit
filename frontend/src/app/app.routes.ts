@@ -21,23 +21,23 @@ export const routes: Routes = [
     },
     {
         path: 'login',
-        component: LoginComponent
+        loadComponent: () => import('./components/login/login.component').then(m => m.LoginComponent)
     },
     {
         path: 'register',
-        component: RegistrationComponent
+        loadComponent: () => import('./components/registration/registration.component').then(m => m.RegistrationComponent)
     },
     {
         path: 'trainings',
-        component: TrainingComponent
+        loadComponent: () => import('./components/training/training.component').then(m => m.TrainingComponent)
     },
     {
         path: 'trainings/manage',
-        component: ManageTrainingComponent
+        loadComponent: () => import('./components/manage-training/manage-training.component').then(m => m.ManageTrainingComponent)
     },
     {
         path: 'trainings/user',
-        component: UserTrainingsComponent
+        loadComponent: () => import('./components/user-trainings/user-trainings.component').then(m => m.UserTrainingsComponent)
     },
     {
         path: '',

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'crypto';
 import { from, map, Observable } from 'rxjs';
 import { GymUserDto } from 'src/dtos/gym-user.dto';
+import { TrainingDto } from 'src/dtos/training.dto';
 import { GymUser } from 'src/entities/gym-user.entity';
 import { Training } from 'src/entities/training.entity';
 import { AlreadyAssignException, MaxCapacityException } from 'src/exceptions/CustomExceptions';

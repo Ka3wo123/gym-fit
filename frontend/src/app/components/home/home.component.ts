@@ -18,5 +18,9 @@ import { RouterLink } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {  
+export class HomeComponent {
+  kfdImagePath: string;
+  constructor() {
+    this.kfdImagePath = 'assets/images/kfd-store.jpg'
+  }
 }
