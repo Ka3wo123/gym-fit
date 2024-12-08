@@ -1,4 +1,4 @@
-import { Controller, Get, HttpException, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, HttpException, HttpStatus, Param, Query, UseGuards } from '@nestjs/common';
 import { GymUserService } from './gym-user.service';
 import { Observable } from 'rxjs';
 import { GymUserDto } from 'src/dtos/gym-user.dto';
@@ -10,6 +10,7 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/types/roles.enum';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { TrainingDto } from 'src/dtos/training.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -19,21 +20,15 @@ export class GymUserController {
     @ApiOperation({
         summary: 'Get all gym users',
         description: 'This endpoint can only be accessed by users with the Admin, Trainer or User role.',
-    })    
+    })
     @Get()
-    public getAllUsers(@Query('role') role?: Role): Observable<{ statusCode: number, data: GymUserDto[] }> {
-        return this._gymUserService.getAllUsers(role).pipe(
-            map(users => ({
-                statusCode: 200,
-                data: users,
-            })),
-            catchError(() => {
-                throw new HttpException({
-                    status: HttpStatus.NOT_FOUND,
-                    error: 'No users found',
-                }, HttpStatus.NOT_FOUND);
-            })
-        );
+    public async getAllUsers(@Query('role') role?: Role): Promise<{ statusCode: number, data: GymUserDto[] }> {
+        const result = await this._gymUserService.getAllUsers(role);
+
+        return {
+            statusCode: HttpStatus.OK,
+            data: result
+        }
     }
 
     @ApiOperation({
@@ -60,11 +55,16 @@ export class GymUserController {
     }
 
     @ApiBearerAuth('JWT')
-    @Get('/:userId/training/:trainingId')
+    @Get('/:email/training/:trainingId')
     @Roles(Role.USER, Role.ADMIN)
     @UseGuards(AuthGuard, RolesGuard)
-    public async assignToTraining(@Param('userId') email: string, @Param('trainingId') trainingId: UUID): Promise<Training> {
-        return this._gymUserService.assignUserToTraining(email, trainingId);
+    public async assignToTraining(@Param('email') email: string, @Param('trainingId') trainingId: UUID): Promise<{ training: TrainingDto, users: GymUserDto[] }> {
+        const result = await this._gymUserService.assignUserToTraining(email, trainingId);
+
+        return {
+            training: result.training,
+            users: result.users
+        }
     }
 
     @ApiBearerAuth('JWT')
@@ -73,5 +73,16 @@ export class GymUserController {
     @UseGuards(AuthGuard, RolesGuard)
     public async getTrainingsForUser(@Param('email') email: string) {
         return this._gymUserService.getTrainingsForUser(email);
+    }
+
+    @Delete('/:email/training/:trainingId')
+    @Roles(Role.ADMIN, Role.USER)
+    @UseGuards(AuthGuard, RolesGuard)
+    public async deleteTrainingForUser(@Param('email') email: string, @Param('trainingId') trainingId: UUID): Promise<{ status: number }> {
+        await this._gymUserService.deleteTrainingForUser(email, trainingId);
+
+        return {
+            status: HttpStatus.NO_CONTENT
+        }
     }
 }

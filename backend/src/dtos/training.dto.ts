@@ -6,7 +6,7 @@ import { WorkoutType } from "src/types/workout-type.enum";
 export class TrainingDto {
     @IsUUID()
     @IsOptional()
-    id: UUID;
+    id?: UUID;
     @IsString()
     @IsNotEmpty()
     name: string;
@@ -19,8 +19,8 @@ export class TrainingDto {
     workoutType?: WorkoutType;
     @IsOptional()
     @IsNumber()
-    capacity: number;
+    capacity?: number;
     @IsNumber()
     @IsOptional()
-    freeSpaces: number;   
+    freeSpaces?: number;   
 }

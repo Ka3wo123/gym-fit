@@ -8,7 +8,6 @@ import { RolesGuard } from './guards/roles.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { TrainingModule } from './trainings/training.module';
 
-
 const options: TypeOrmModuleOptions = {
   type: 'mariadb',
   host: process.env.NODE_ENV === 'development' ? 'localhost' : process.env.DB_HOST,
@@ -36,7 +35,7 @@ const options: TypeOrmModuleOptions = {
       provide: APP_GUARD,
       useClass: RolesGuard
     }
-  ]
+  ]  
 })
 export class AppModule {
 }

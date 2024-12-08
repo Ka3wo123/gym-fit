@@ -41,6 +41,14 @@ export class GymUserService {
     });
   }
 
+  public deleteTrainingForUser(email: string, trainingId: string) {
+    return this.http.delete<void>(`${this.prefixURL}/${email}/training/${trainingId}`, {
+      headers: {
+        Authorization: `Bearer ${this.getToken()}`
+      }
+    })
+  }
+
   private getToken() {
     return localStorage.getItem('accessToken');
   }

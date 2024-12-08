@@ -14,7 +14,8 @@ import { Training } from 'src/entities/training.entity';
     JwtModule,
     TypeOrmModule.forFeature([
       GymUser,
-      Training])
+      Training
+    ])
   ],
   controllers: [
     GymUserController

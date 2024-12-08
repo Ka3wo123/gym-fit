@@ -43,8 +43,8 @@ export class TrainingComponent implements OnInit {
   }
 
   assignToTraining(trainingId: string): void {
-    const userId = this._authService.getEmail();
-    this._userService.assignUserToTraining(userId, trainingId).subscribe({
+    const email = this._authService.getEmail();
+    this._userService.assignUserToTraining(email, trainingId).subscribe({
       next: () => {
         this._toastr.success('Assigned to training');
         this._trainingService.getTrainings().subscribe(response => this.trainings = response.data)
