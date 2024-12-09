@@ -154,8 +154,6 @@ describe('TrainingController', () => {
 
         const result = await controller.updateTraining(training.id, updateTrainingDto);
 
-        console.log(result.data)
-
         expect(spy).toHaveBeenCalledWith(training.id, updateTrainingDto);
         expect(result.data.affected).toEqual(1);
     });
