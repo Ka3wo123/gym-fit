@@ -2,8 +2,7 @@
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": "..",
   "testEnvironment": "node",
-  "setupFiles": ["dotenv/config"],
-  "setupFilesAfterEnv": ["<rootDir>/.test.env"],
+  "globalSetup": "<rootDir>/test/setup.ts",
   "testRegex": ".ispec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"

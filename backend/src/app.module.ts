@@ -10,7 +10,7 @@ import { TrainingModule } from './trainings/training.module';
 
 const options: TypeOrmModuleOptions = {
   type: 'mariadb',
-  host: /^(test|development)$/.test(process.env.NODE_ENV) ? 'localhost' : process.env.DB_HOST,
+  host: /^(test|production)$/.test(process.env.NODE_ENV) ? process.env.DB_HOST : 'localhost',
   port: parseInt(process.env.DB_PORT),
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
