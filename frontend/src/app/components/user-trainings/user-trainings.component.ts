@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { GymUserService } from '../../services/gym-user.service';
 import extractData from '../../utils/token-extractor';
 import TrainingDto from '../../types/TrainingDto';

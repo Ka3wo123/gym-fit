@@ -44,16 +44,17 @@ export class TrainingService {
                 );
     
                 const count = result[0]?.count || 0;
-                dto.freeSpaces = training.capacity ? training.capacity - count : null;
+                dto.freeSpaces = training.capacity ? training.capacity - count + 1 : null;
     
                 return dto;
             })
         );
     }
 
-    public async addTraining(createTrainingDto: TrainingDto): Promise<TrainingDto> {
+    public async addTraining(email: string, createTrainingDto: TrainingDto): Promise<TrainingDto> {
         const training = this._trainingRepo.create(createTrainingDto);
         const savedTraining = await this._trainingRepo.save(training);
+        this._userService.assignUserToTraining(email, training.id)
 
         return plainToClass(TrainingDto, savedTraining);
     }

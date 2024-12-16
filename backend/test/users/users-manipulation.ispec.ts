@@ -8,7 +8,6 @@ import { Role } from 'src/types/roles.enum';
 import mockAuthGuard from '../mocks/mock-auth-guard';
 import mockRolesGuard from '../mocks/mock-roles-guard';
 import { JwtService } from '@nestjs/jwt';
-import { TrainingService } from 'src/trainings/training.service';
 import { UUID } from 'crypto';
 
 describe('UserController (it) - Manipulation', () => {

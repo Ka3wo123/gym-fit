@@ -4,7 +4,6 @@ import GymUserResponse from '../types/GymUserResponse';
 import { Role } from '../types/Role';
 import { Training } from '../types/Training';
 import { Observable } from 'rxjs';
-import TrainerDto from '../types/TrainerDto';
 import TrainingDto from '../types/TrainingDto';
 
 

@@ -115,12 +115,11 @@ describe('TrainingController', () => {
         expect(trainings.data.every(training => training.name.includes(name) && training.workoutType === workoutType)).toBe(true);
     });
 
-    it('should add training and assign trainer to it', async () => {
+    it('should add training', async () => {
         const id = randomUUID();
         const name = 'Training';
         const dateStart = new Date();
         const workoutType = WorkoutType.CALISTHENICS;
-        const trainer = usersFixture.find(u => u.role === 'trainer');
         const training: TrainingDto = {
             name: name,
             dateStart: dateStart,
@@ -133,9 +132,9 @@ describe('TrainingController', () => {
             workoutType: workoutType
         });
 
-        const result = await controller.addTraining(trainer.email, training);
+        const result = await controller.addTraining(training);
 
-        expect(spy).toHaveBeenCalledWith(trainer.email, training);
+        expect(spy).toHaveBeenCalledWith(training);
         expect(result.data.name).toEqual(name);
     });
 

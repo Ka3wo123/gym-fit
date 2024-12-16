@@ -50,7 +50,7 @@ export class AddTrainingComponent {
     if (this.trainingForm.valid) {
       const token = extractData();
       if (token?.email) {
-        this._trainingService.addTraining(this.trainingForm.value).subscribe({
+        this._trainingService.addTraining(token.email, this.trainingForm.value).subscribe({
           next: () => {
             this._toastr.success('Training added successfully');
           },

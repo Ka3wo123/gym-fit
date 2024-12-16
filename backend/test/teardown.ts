@@ -1,4 +1,3 @@
-
 const teardown = async () => {
     await global.mariadb.stop();
 };
