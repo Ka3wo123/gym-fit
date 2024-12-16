@@ -1,11 +1,8 @@
 import { Controller, Delete, Get, HttpException, HttpStatus, Param, Query, UseGuards } from '@nestjs/common';
 import { GymUserService } from './gym-user.service';
-import { Observable } from 'rxjs';
 import { GymUserDto } from 'src/dtos/gym-user.dto';
-import { map, catchError } from 'rxjs/operators';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { UUID } from 'crypto';
-import { Training } from 'src/entities/training.entity';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/types/roles.enum';

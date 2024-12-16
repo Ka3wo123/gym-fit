@@ -1,7 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UUID } from 'crypto';
-import { from, map, Observable } from 'rxjs';
 import { GymUserDto } from 'src/dtos/gym-user.dto';
 import { TrainingDto } from 'src/dtos/training.dto';
 import { GymUser } from 'src/entities/gym-user.entity';

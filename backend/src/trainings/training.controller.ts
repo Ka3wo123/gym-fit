@@ -37,8 +37,8 @@ export class TrainingController {
     @Post()
     @Roles(Role.TRAINER)
     @UseGuards(AuthGuard, RolesGuard)
-    public async addTraining(@Query('email') email: string, @Body(new ValidationPipe) training: TrainingDto): Promise<{ status: number, data: TrainingDto }> {
-        const data = await this._trainingService.addTraining(email, training);
+    public async addTraining(@Body(new ValidationPipe) training: TrainingDto): Promise<{ status: number, data: TrainingDto }> {
+        const data = await this._trainingService.addTraining(training);
         return {
             status: 201,
             data: data
@@ -66,7 +66,7 @@ export class TrainingController {
         const result = await this._trainingService.deleteTraining(id);
 
         return {
-            status: 204,
+            status: 200,
             data: result
         }
     }

@@ -20,10 +20,10 @@ export class TrainingService {
     return this.http.get<TrainingResponse>(`${this.prefixURL}`);
   }
 
-  addTraining(email: string, training: TrainingDto) {
+  addTraining(training: TrainingDto) {
     const headers = this.getAuthHeaders();
 
-    return this.http.post(`${this.prefixURL}?email=${email}`, training, {
+    return this.http.post(this.prefixURL, training, {
       headers
     }).pipe(
       tap(() => this.trainingUpdate.next())

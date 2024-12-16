@@ -2,12 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { GymUserController } from './gym-user.controller';
 import { GymUserService } from './gym-user.service';
 import { AuthService } from 'src/auth/auth.service';
-import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
-import { Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { trainingsFixture, usersFixture } from '../../test/fixtures/fixtures';
-import { randomUUID } from 'crypto';
 import { Role } from 'src/types/roles.enum';
 
 describe('GymUserController', () => {

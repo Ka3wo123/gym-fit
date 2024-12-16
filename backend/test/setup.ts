@@ -19,6 +19,7 @@ const initMariadb = async () => {
     process.env.DB_USERNAME = mariadb.getUsername();
     process.env.DB_PASSWORD = mariadb.getRootPassword();
     process.env.DB_NAME = mariadb.getDatabase();
+
 }
 
 export default init;
