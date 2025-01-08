@@ -120,6 +120,7 @@ describe('TrainingController', () => {
         const name = 'Training';
         const dateStart = new Date();
         const workoutType = WorkoutType.CALISTHENICS;
+        const email = 'trainer@email.com';
         const training: TrainingDto = {
             name: name,
             dateStart: dateStart,
@@ -132,9 +133,9 @@ describe('TrainingController', () => {
             workoutType: workoutType
         });
 
-        const result = await controller.addTraining(training);
+        const result = await controller.addTraining(email, training);
 
-        expect(spy).toHaveBeenCalledWith(training);
+        expect(spy).toHaveBeenCalledWith(email, training);
         expect(result.data.name).toEqual(name);
     });
 

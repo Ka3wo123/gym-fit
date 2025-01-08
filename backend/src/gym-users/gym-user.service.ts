@@ -60,7 +60,7 @@ export class GymUserService {
             [trainingId]
         );
     
-        if (training.capacity && usersCount[0].count >= training.capacity) {
+        if (training.capacity && usersCount[0].count > training.capacity) {
             throw new MaxCapacityException('Full capacity for this training');
         }
     
